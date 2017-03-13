@@ -14,6 +14,7 @@ import {
   Image,
   Alert,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import BarcodeScanner from 'react-native-barcodescanner';
 import Button from 'react-native-button';
@@ -41,9 +42,10 @@ class IOT extends Component {
       ycor:null,
       corx:'',
       array:[],
-      cordinate:{},
+      cordinate:{"xcor":78,"ycor":78,"name" :"Cisco"},
       count: 0
     };
+    this.barcodeReceived = this.barcodeReceived.bind(this);
   }
 
   _getOptionList() {
@@ -83,12 +85,9 @@ class IOT extends Component {
     
   barcodeReceived(e) {
     console.log('Barcode: ' + e.data);
-    console.log('Type: ' + e.type);
-      this.setState({
-      ...this.state,
-      barcode: e.data
-    });
-    ToastAndroid.show('Barcode:' + e.data, ToastAndroid.SHORT);
+    ToastAndroid.show('Barcode:' + e.data, ToastAndroid.SHORT);      
+    this.state.barcode=e.data + "";
+    this.handleShowBuildingMap();
   }
     
   onSelectBuilding(data) {
@@ -146,7 +145,7 @@ class IOT extends Component {
     <Image
         source={require('./images/iot.jpg')}
         style={styles.imageContainer}>
-    <View>
+    <View style={styles.container}>
 {renderIf(!this.state.showbuildingMap,
     <View>
       <View style={{ flex: 1, alignItems: 'center', padding: 0}}>
@@ -250,6 +249,9 @@ class IOT extends Component {
       )}
         {renderIf(this.state.showbuildingMap, 
         <View>
+        <Text style={styles.welcomeBuildingMap}>
+          Device Location Mapping
+        </Text>
         <Text Text style={styles.buildingMapView}>You are viewing {this.state.building}, {this.state.floor}</Text>          
             <ScrollView>              
                 <ScrollView horizontal={true} vertical={true} directionalLockEnabled={false}>
@@ -269,7 +271,7 @@ class IOT extends Component {
             style={{ fontSize: 20, color: 'black'}}
             styleDisabled={{color: 'red'}}
             onPress={() => this.handleBackButton()}>
-            Back
+            Update
         </Button>
         </View>
         )}
@@ -283,20 +285,32 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#c0c0c0',
+    flex:1,
+    alignSelf: 'stretch',
+  },
+  welcomeBuildingMap: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 5,
+    fontWeight: 'bold',
+    color: '#333333',
+    marginBottom: 5,
+    alignSelf: 'stretch', 
+    textDecorationLine: 'underline',
   },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
-    margin: 10,
+    margin: 5,
     fontWeight: 'bold',
     color: '#333333',
-    marginBottom: 20,  
+    marginBottom: 20,
+    alignSelf: 'stretch', 
+    textDecorationLine: 'underline',
   },
   buildingMapView: {
     fontSize: 15,
-    textAlign: 'center',
-    margin: 2,
+    textAlign: 'center',    
     fontWeight: 'bold',
     color: '#333333',
     marginBottom: 2,  
@@ -330,7 +344,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
    imageContainer: {
-    flex: 2,
+    flex: 1,
     width: undefined,
     height: undefined,
     backgroundColor:'transparent',
