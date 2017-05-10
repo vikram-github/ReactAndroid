@@ -1,18 +1,18 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
 
 import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Button,
+  ToastAndroid
 } from 'react-native';
 
 export default class AwesomeProject extends Component {
+  _handlePress() {
+    ToastAndroid.show('Clicked Me', ToastAndroid.SHORT);
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -23,8 +23,14 @@ export default class AwesomeProject extends Component {
           Now, its easy to develop our IOT Project :P
         </Text>
         <Text style={styles.instructions}>
-          -Vikram Nagaraj
+          Some instructions goes here
         </Text>
+        <Button
+        title='Click Me'
+        style={{fontSize: 20, color: 'green'}}
+        styleDisabled={{color: 'red'}}
+        onPress={() => this._handlePress()}>        
+      </Button>
       </View>
     );
   }

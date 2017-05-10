@@ -15,14 +15,53 @@ import {
   Alert,
   TouchableOpacity,
   Dimensions,
+  TextInput,
 } from 'react-native';
 import BarcodeScanner from 'react-native-barcodescanner';
 import Button from 'react-native-button';
 import renderIf from './renderif';
 import LinearGradient from 'react-native-linear-gradient';
-
-
+import RNFetchBlob from 'react-native-fetch-blob';
+import RestClient from 'react-native-rest-client';
+import ProgressBarClassic from 'react-native-progress-bar-classic';
 import {Select, Option} from "react-native-chooser";
+
+//https://www.npmjs.com/package/react-native-fetch-blob -> Refer this for downloading Blob
+//https://www.npmjs.com/package/react-native-rest-client
+
+var restBaseURL="https://jsonplaceholder.typicode.com";
+
+export default class RestAPI extends RestClient {
+    // Initialize with your base URL 
+   constructor (authToken) {
+    super(restBaseURL, {
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+      },
+    });
+  }
+  login (username, password) {
+    return this.POST('/auth', { username, password })
+           .then(response => response.csrfToken);
+  }
+  postLocationData () {
+    return this.POST('/auth', {})
+      .then(response => response.user);
+  }
+  checkDummyURL(){
+      return fetch('https://facebook.github.io/react-native/movies.json')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        return responseJson.movies;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+};
+
+const restAPI = new RestAPI();
 
 class IOT extends Component {
   constructor(props) {
@@ -31,19 +70,24 @@ class IOT extends Component {
     this.state = {
       building: '',
       floor: '',
-      showSelection: true,
+      showSelection: false,
       torchMode: 'off',
       barcode:'6E:02:FD:56:32:45:56',
       cameraType: 'back',
       showBarcode:false,
       showGoogleMap:false,
       showbuildingMap:false,
+      showPrimeLogin:true,
       xcor:null,
       ycor:null,
       corx:'',
+      primeIP:'',
+      primeUserName:'',
+      primePassword:'',
       array:[],
       cordinate:{"xcor":78,"ycor":78,"name" :"Cisco"},
-      count: 0
+      count: 0,
+      progress:0
     };
     this.barcodeReceived = this.barcodeReceived.bind(this);
   }
@@ -106,8 +150,9 @@ class IOT extends Component {
   _handlePressGoogleLocation(){
     this.state.showSelection=false;
     this.state.showBarcode=false;
+    this.state.showGoogleMap=false; 
     this.state.showbuildingMap=false;
-    this.state.showGoogleMap=true;  
+    this.state.showPrimeLogin=true;
     this.forceUpdate();
   }
   
@@ -116,15 +161,39 @@ class IOT extends Component {
       this.state.showBarcode=false;
       this.state.showbuildingMap=false;
       this.state.showGoogleMap=false;
+      this.state.showPrimeLogin=false;
       this.forceUpdate();
+  }
+    
+  showProgressBar(){
+      
   }
 
   handleShowBuildingMap(){
     this.state.showSelection=false;
     this.state.showBarcode=false;
     this.state.showGoogleMap=false; 
+    this.state.showPrimeLogin=false;
     this.state.showbuildingMap=true;
     this.forceUpdate();
+  }
+    
+  handlePrimeLogin(){
+    ToastAndroid.show('Login in progres..', ToastAndroid.SHORT);   
+    fetch('https://facebook.github.io/react-native/movies.json')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.state.showSelection=true;
+        this.state.showBarcode=false;
+        this.state.showGoogleMap=false; 
+        this.state.showbuildingMap=false;
+        this.state.showPrimeLogin=false;
+        this.forceUpdate();
+      })
+      .catch((error) => {
+        ToastAndroid.show('Login Failed', ToastAndroid.LONG);  
+      });
+    
   }
 
   handleTouchPress(evt) {
@@ -132,7 +201,6 @@ class IOT extends Component {
     console.log("Coordinates",`x coord = ${evt.nativeEvent.locationX}`);
     console.log("Coordinates",`y coord = ${evt.nativeEvent.locationY}`);
     var cordinates = {"xcor":evt.nativeEvent.locationX,"ycor":evt.nativeEvent.locationY,"name" :"Cisco"}
-    //Alert.alert("X->" + evt.nativeEvent.locationX+"  Y-> "+evt.nativeEvent.locationX+"");
     this.setState({
       ...this.state,
       cordinate:cordinates
@@ -152,6 +220,36 @@ class IOT extends Component {
        <Text style={styles.welcome}>
           Device Location Mapping
         </Text>
+         {renderIf(this.state.showPrimeLogin,
+           <View>
+            <Text style={styles.welcomePrime}>
+                Enter Prime Details
+            </Text>
+            <TextInput
+            style={{height: 40, width:260}}
+            placeholder="Prime IP/Host"
+            onChangeText={(text) => this.setState({primeIP:text})}
+            />
+            <TextInput
+            style={{height: 40}}
+            placeholder="Prime User Name"
+            onChangeText={(text) => this.setState({primeUserName:text})}
+            />
+            <TextInput
+            style={{height: 40}}
+            placeholder="Prime Password"
+            secureTextEntry={true}
+            onChangeText={(text) => this.setState({primePassword:text})}
+            />
+            <Button
+            containerStyle={{padding:10, height:45,marginTop:10, marginBottom:10, overflow:'hidden', borderRadius:4, backgroundColor: '#ADD8E6'}}
+            style={{ fontSize: 20, color: 'black'}}
+            styleDisabled={{color: 'red'}}
+            onPress={() => this.handlePrimeLogin()}>
+            Login
+          </Button>
+            </View>
+          )}
         {renderIf(this.state.showSelection,
         <Select
             onSelect = {this.onSelectBuilding.bind(this)}
@@ -182,10 +280,14 @@ class IOT extends Component {
           )}
         
         
-        
-          <Text style={{marginTop:10, color: '#333333'}}>Selected Building: {this.state.building}</Text>
-          <Text style={{marginTop:10, color: '#333333'}}>Selected Floor: {this.state.floor}</Text>
-          {renderIf(!this.state.showSelection,
+          {renderIf(this.state.showSelection,
+          <View>
+            <Text style={{marginTop:10, color: '#333333'}}>Prime IP/Host: {this.state.primeIP}</Text>
+            <Text style={{marginTop:10, color: '#333333'}}>Selected Building: {this.state.building}</Text>
+            <Text style={{marginTop:10, color: '#333333'}}>Selected Floor: {this.state.floor}</Text>
+          </View>
+           )}
+          {renderIf((!this.state.showSelection && !this.state.showPrimeLogin),
           <View>
           <Text style={{marginTop:10}}>Barcode: {this.state.barcode}</Text>
           <Button
@@ -212,14 +314,14 @@ class IOT extends Component {
             style={{ fontSize: 20, color: 'black'}}
             styleDisabled={{color: 'red'}}
             onPress={() => this._handlePressGoogleLocation()}>
-            Use Google Location
+            Configure Prime
           </Button>
             )}         
       </View>
       {renderIf(this.state.showBarcode,
         <BarcodeScanner
             onBarCodeRead={this.barcodeReceived}
-            style={{ flex: 1 }}
+            style={{ flex: 1, width:300 }}
             torchMode={this.state.torchMode}
             cameraType={this.state.cameraType}
         />     
@@ -335,6 +437,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  welcomePrime: {
+    fontSize: 15,
+    textAlign: 'center',
+    margin: 5,
+    fontWeight: 'bold',
+    color: '#333333',
+    marginBottom: 20,
+    alignSelf: 'stretch',    
   },
   map: {
     position: 'absolute',

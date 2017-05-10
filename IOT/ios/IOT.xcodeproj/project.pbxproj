@@ -38,6 +38,7 @@
 		D7425870D765450E808668BA /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 98411DB67F9F4AC3A254E076 /* libBVLinearGradient.a */; };
 		FA1857739F48489F8C1B1681 /* libPPTMapView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FA475207E21402EBF895A00 /* libPPTMapView.a */; };
 		B72E7B828FBF4D1CA2505F8B /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 31728FF2E34641CD9B14461D /* libAirMaps.a */; };
+		6CD28A157917414197DFCEB4 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E6F5926C950D4951A36F9968 /* libRNFetchBlob.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -263,6 +264,8 @@
 		9FA475207E21402EBF895A00 /* libPPTMapView.a */ = {isa = PBXFileReference; name = "libPPTMapView.a"; path = "libPPTMapView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		21294C717E6445B391CE8A68 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; name = "AirMaps.xcodeproj"; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		31728FF2E34641CD9B14461D /* libAirMaps.a */ = {isa = PBXFileReference; name = "libAirMaps.a"; path = "libAirMaps.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		A51CA0906D3B4D3F8219B173 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; name = "RNFetchBlob.xcodeproj"; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		E6F5926C950D4951A36F9968 /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,6 +295,7 @@
 				D7425870D765450E808668BA /* libBVLinearGradient.a in Frameworks */,
 				FA1857739F48489F8C1B1681 /* libPPTMapView.a in Frameworks */,
 				B72E7B828FBF4D1CA2505F8B /* libAirMaps.a in Frameworks */,
+				6CD28A157917414197DFCEB4 /* libRNFetchBlob.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -461,6 +465,7 @@
 				16C413928C2F4C4682B3819D /* BVLinearGradient.xcodeproj */,
 				80DEFDDC9FD34E09B13173AC /* PPTMapView.xcodeproj */,
 				21294C717E6445B391CE8A68 /* AirMaps.xcodeproj */,
+				A51CA0906D3B4D3F8219B173 /* RNFetchBlob.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -991,12 +996,14 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-maps-google/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 				);
 			};
 			name = Debug;
@@ -1020,12 +1027,14 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-maps-google/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 				);
 			};
 			name = Release;
@@ -1050,6 +1059,7 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-maps-google/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 				);
 			};
 			name = Debug;
@@ -1073,6 +1083,7 @@
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-maps-google/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 				);
 			};
 			name = Release;
@@ -1105,12 +1116,14 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-maps-google/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 				);
 			};
 			name = Debug;
@@ -1143,12 +1156,14 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-linear-gradient/BVLinearGradient",
 					"$(SRCROOT)/../node_modules/react-native-maps-google/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
 				);
 			};
 			name = Release;
@@ -1176,6 +1191,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -1200,6 +1216,7 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
