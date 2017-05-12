@@ -25,11 +25,12 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import RestClient from 'react-native-rest-client';
 import ProgressBarClassic from 'react-native-progress-bar-classic';
 import {Select, Option} from "react-native-chooser";
-
+//https://www.npmjs.com/package/react-native-modal-wrapper
+//https://www.npmjs.com/package/react-native-menu
 //https://www.npmjs.com/package/react-native-fetch-blob -> Refer this for downloading Blob
 //https://www.npmjs.com/package/react-native-rest-client
 
-var restBaseURL="https://jsonplaceholder.typicode.com";
+var restBaseURL="http://72.163.208.40:8080/PrimeBridge/vi/BridgeService";
 
 export default class RestAPI extends RestClient {
     // Initialize with your base URL 
@@ -38,6 +39,12 @@ export default class RestAPI extends RestClient {
       headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
+              'userName':'root',
+    'password':'Public123',
+    'primeIP':'10.105.41.226',
+    'macAddress':'fa:ab:ee:ee:cc:ff',
+    'xcoordinate':123,
+    'ycoordinate':123
       },
     });
   }
@@ -46,8 +53,10 @@ export default class RestAPI extends RestClient {
            .then(response => response.csrfToken);
   }
   postLocationData () {
-    return this.POST('/auth', {})
-      .then(response => response.user);
+    return this.POST('/prime/update/lightData', {})
+      .then(response => {
+        ToastAndroid.show('response', ToastAndroid.SHORT);
+    });
   }
   checkDummyURL(){
       return fetch('https://facebook.github.io/react-native/movies.json')
@@ -72,7 +81,7 @@ class IOT extends Component {
       floor: '',
       showSelection: false,
       torchMode: 'off',
-      barcode:'6E:02:FD:56:32:45:56',
+      barcode:'ab:bb:cc:dd:ee:ee',
       cameraType: 'back',
       showBarcode:false,
       showGoogleMap:false,
@@ -87,7 +96,8 @@ class IOT extends Component {
       array:[],
       cordinate:{"xcor":78,"ycor":78,"name" :"Cisco"},
       count: 0,
-      progress:0
+      progress:0,
+      primeBridgeIP:''
     };
     this.barcodeReceived = this.barcodeReceived.bind(this);
   }
@@ -157,12 +167,40 @@ class IOT extends Component {
   }
   
   handleBackButton(){
-      this.state.showSelection=true;
-      this.state.showBarcode=false;
-      this.state.showbuildingMap=false;
-      this.state.showGoogleMap=false;
-      this.state.showPrimeLogin=false;
-      this.forceUpdate();
+      ToastAndroid.show('Posted Data', ToastAndroid.SHORT);
+      
+      var url = 'https://bglgrp0229-pod:8023';
+      url = 'http://'+this.state.primeBridgeIP+':8080';
+      //url = 'http://72.163.208.40:8080';
+     fetch(url + '/PrimeBridge/vi/BridgeService/prime/update/lightData', {  
+         method: 'POST',
+         headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'userName':this.state.primeUserName,
+            'password':this.state.primePassword,
+            'primeIP':this.state.primeIP,
+            'macAddress':this.state.barcode,
+            'xcoordinate':parseInt(this.state.cordinate.xcor),
+            'ycoordinate':parseInt(this.state.cordinate.ycor)
+        }
+     }).catch(function (err) {
+         ToastAndroid.show(JSON.stringify(err), ToastAndroid.SHORT);
+     });
+/*
+'userName':this.state.primeUserName,
+            'password':this.state.primePassword,
+            'primeIP':this.state.primeIP,
+            'macAddress':this.state.barcode,
+            'xcoordinate':this.state.xcor,
+            'ycoordinate':this.state.ycor
+            */
+        this.state.showSelection=true;
+        this.state.showBarcode=false;
+        this.state.showbuildingMap=false;
+        this.state.showGoogleMap=false;
+        this.state.showPrimeLogin=false;
+        this.forceUpdate();    
   }
     
   showProgressBar(){
@@ -240,6 +278,11 @@ class IOT extends Component {
             placeholder="Prime Password"
             secureTextEntry={true}
             onChangeText={(text) => this.setState({primePassword:text})}
+            />
+            <TextInput
+            style={{height: 40, width:260}}
+            placeholder="Prime Bridge IP"
+            onChangeText={(text) => this.setState({primeBridgeIP:text})}
             />
             <Button
             containerStyle={{padding:10, height:45,marginTop:10, marginBottom:10, overflow:'hidden', borderRadius:4, backgroundColor: '#ADD8E6'}}
@@ -358,7 +401,7 @@ class IOT extends Component {
             <ScrollView>              
                 <ScrollView horizontal={true} vertical={true} directionalLockEnabled={false}>
                     <TouchableOpacity onPress={(evt) => this.handleTouchPress(evt)}>
-                        <Image source={require('./images/BGL13.png')} />
+                        <Image source={require('./images/bgl-13-2.jpeg')} />
                     {renderIf(this.state.cordinate.xcor && this.state.cordinate.ycor,
                     <View style=        {{position:"absolute",flex:1,left:this.state.cordinate.xcor,top:this.state.cordinate.ycor,right:this.state.cordinate.xcor,bottom:this.state.cordinate.ycor}}>
                         <Image source={require('./images/pin.png')} style={{resizeMode:'cover',width:35,height:35}}>
