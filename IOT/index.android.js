@@ -181,8 +181,8 @@ class IOT extends Component {
             'password':this.state.primePassword,
             'primeIP':this.state.primeIP,
             'macAddress':this.state.barcode,
-            'xcoordinate':parseInt(this.state.cordinate.xcor),
-            'ycoordinate':parseInt(this.state.cordinate.ycor)
+            'xcoordinate':Math.floor(parseInt(this.state.cordinate.xcor)/20),
+            'ycoordinate':Math.floor(parseInt(this.state.cordinate.ycor)/10)
         }
      }).catch(function (err) {
          ToastAndroid.show(JSON.stringify(err), ToastAndroid.SHORT);
