@@ -181,7 +181,7 @@ class IOT extends Component {
             'password':this.state.primePassword,
             'primeIP':this.state.primeIP,
             'macAddress':this.state.barcode,
-            'xcoordinate':Math.floor(parseInt(this.state.cordinate.xcor)/20),
+            'xcoordinate':Math.floor(parseInt(this.state.cordinate.xcor)/10),
             'ycoordinate':Math.floor(parseInt(this.state.cordinate.ycor)/10)
         }
      }).catch(function (err) {
