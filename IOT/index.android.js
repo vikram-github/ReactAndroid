@@ -364,7 +364,7 @@ class IOT extends Component {
       {renderIf(this.state.showBarcode,
         <BarcodeScanner
             onBarCodeRead={this.barcodeReceived}
-            style={{ flex: 1, width:300 }}
+            style={{ flex: 1, width:450 }}
             torchMode={this.state.torchMode}
             cameraType={this.state.cameraType}
         />     
