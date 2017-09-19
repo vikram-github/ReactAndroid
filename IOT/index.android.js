@@ -90,14 +90,15 @@ class IOT extends Component {
       xcor:null,
       ycor:null,
       corx:'',
-      primeIP:'',
-      primeUserName:'',
-      primePassword:'',
+      primeIP:'10.105.41.226',
+      primeUserName:'root',
+      primePassword:'Public123',
       array:[],
       cordinate:{"xcor":78,"ycor":78,"name" :"Cisco"},
       count: 0,
       progress:0,
-      primeBridgeIP:''
+      primeBridgeIP:'',
+      macAddressOfMobile:''
     };
     this.barcodeReceived = this.barcodeReceived.bind(this);
   }
@@ -165,6 +166,10 @@ class IOT extends Component {
     this.state.showPrimeLogin=true;
     this.forceUpdate();
   }
+    
+  readDataFromCMX(){
+      
+  }
   
   handleBackButton(){
       ToastAndroid.show('Posted Data', ToastAndroid.SHORT);
@@ -203,17 +208,73 @@ class IOT extends Component {
         this.forceUpdate();    
   }
     
+  handleCMX(){
+      ToastAndroid.show('Fetching Data from CMX', ToastAndroid.SHORT);
+      
+      var url = 'http://173.39.88.139/api/location/v2/clients/';
+      var self = this;
+     fetch(url, {  
+         method: 'GET',
+         headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': "Basic YWRtaW46VGVsMTIzNDU=",
+            'password':'Tel12345',
+        }
+     }).then(response => response.json()).then(function(response){
+        self.showBuildingMap(response);         
+     })
+     .catch(function (err) {
+         ToastAndroid.show("Error ---> " + JSON.stringify(err), ToastAndroid.SHORT);
+     });
+      
+}
+    
   showProgressBar(){
       
   }
-
-  handleShowBuildingMap(){
+    
+  showBuildingMap(response){
+     // Hardcoded for now.. But need to dynamically calculate the same
+     var wifiMacAddress = "80:58:f8:36:84:7f";
+     
+      ToastAndroid.show(JSON.stringify(response.length)+" Json",ToastAndroid.SHORT);
+      if(response.length > 1){
+        var result = response;
+        for(var res in result){
+            ToastAndroid.show(res, ToastAndroid.SHORT); 
+            if(res.macAddress === wifiMacAddress){
+                ToastAndroid.show("Wifi Address Matched", ToastAndroid.SHORT); 
+                var mapCo = res.mapCoordinate;
+                var x = mapCo.x * 10;
+                var y = mapCo.y * 10;
+                this.state.cordinate = {"xcor":x,"ycor":y,"name" :"Cisco"};
+            } else {
+                ToastAndroid.show(res.macAddress, ToastAndroid.SHORT);
+            }
+        }
+      } else {
+          ToastAndroid.show("Json Length == 0", ToastAndroid.SHORT);     
+      }
+     this.state.showSelection=false;
+     this.state.showBarcode=false;
+     this.state.showGoogleMap=false; 
+     this.state.showPrimeLogin=false;
+     this.state.showbuildingMap=true;
+     this.forceUpdate();
+  }
+    
+  handleShowBuildingBypass(){
     this.state.showSelection=false;
     this.state.showBarcode=false;
     this.state.showGoogleMap=false; 
     this.state.showPrimeLogin=false;
     this.state.showbuildingMap=true;
     this.forceUpdate();
+  }
+
+  handleShowBuildingMap(){
+    this.handleShowBuildingBypass();
   }
     
   handlePrimeLogin(){
@@ -302,9 +363,7 @@ class IOT extends Component {
             backdropStyle  = {{backgroundColor : "#d3d5d6"}}
             optionListStyle = {{backgroundColor : "#F5FCFF"}}
           >
-          <Option value = "BGL-16">BGL-16</Option>
-          <Option value = "BGL-17">BGL-17</Option>
-          <Option value = "BGL-18">BGL-18</Option>
+          <Option value = "BGL-15">BGL-15</Option>
         </Select>
          )}
          {renderIf(this.state.showSelection,
@@ -316,9 +375,7 @@ class IOT extends Component {
             backdropStyle  = {{backgroundColor : "#d3d5d6"}}
             optionListStyle = {{backgroundColor : "#F5FCFF"}}
           >
-          <Option value = "1st Floor">1st Floor</Option>
-          <Option value = "2nd Floor">2nd Floor</Option>
-          <Option value = "3rd Floor">3rd Floor</Option>          
+          <Option value = "4th Floor">4th Floor</Option>
         </Select>
           )}
         
@@ -337,7 +394,7 @@ class IOT extends Component {
             containerStyle={{padding:10, height:45,marginTop:10, marginBottom:10, overflow:'hidden', borderRadius:4, backgroundColor: '#ADD8E6'}}
             style={{ fontSize: 20, color: 'black'}}
             styleDisabled={{color: 'red'}}
-            onPress={() => this.handleShowBuildingMap()}>
+            onPress={() => this.handleShowBuildingBypass()}>
             Launch Building Map
           </Button>
           </View>
@@ -401,7 +458,7 @@ class IOT extends Component {
             <ScrollView>              
                 <ScrollView horizontal={true} vertical={true} directionalLockEnabled={false}>
                     <TouchableOpacity onPress={(evt) => this.handleTouchPress(evt)}>
-                        <Image source={require('./images/bgl-13-2.jpeg')} />
+                        <Image style={{width: 350, height: 222}} source={require('./images/bgl-14-5.png')} />
                     {renderIf(this.state.cordinate.xcor && this.state.cordinate.ycor,
                     <View style=        {{position:"absolute",flex:1,left:this.state.cordinate.xcor,top:this.state.cordinate.ycor,right:this.state.cordinate.xcor,bottom:this.state.cordinate.ycor}}>
                         <Image source={require('./images/pin.png')} style={{resizeMode:'cover',width:35,height:35}}>
